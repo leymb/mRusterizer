@@ -35,7 +35,7 @@ fn main() {
             pos: Vec3 {
                 x: 100.0,
                 y: 100.0,
-                z: 1.0,
+                z: 0.0,
             },
             color: Vec3 {
                 x: 1.0,
@@ -46,7 +46,7 @@ fn main() {
         },
         vert_b: Vertx {
             pos: Vec3 {
-                x: 250.0,
+                x: 100.0,
                 y: 400.0,
                 z: 1.0,
             },
@@ -55,12 +55,12 @@ fn main() {
                 y: 0.0,
                 z: 1.0,
             },
-            uv: glam::vec2(0.5, 1.0),
+            uv: glam::vec2(0.0, 1.0),
         },
         vert_c: Vertx {
             pos: Vec3 {
                 x: 400.0,
-                y: 100.0,
+                y: 400.0,
                 z: 1.0,
             },
             color: Vec3 {
@@ -68,15 +68,15 @@ fn main() {
                 y: 0.0,
                 z: 1.0,
             },
-            uv: glam::vec2(1.0, 0.0),
+            uv: glam::vec2(1.0, 1.0),
         },
     };
 
     let second_tri = Tri {
         vert_a: Vertx {
             pos: Vec3 {
-                x: 0.0,
-                y: 0.0,
+                x: 100.0,
+                y: 100.0,
                 z: 0.0,
             },
             color: Vec3 {
@@ -88,21 +88,8 @@ fn main() {
         },
         vert_b: Vertx {
             pos: Vec3 {
-                x: 150.0,
-                y: 300.0,
-                z: 0.0,
-            },
-            color: Vec3 {
-                x: 0.0,
-                y: 1.0,
-                z: 0.0,
-            },
-            uv: glam::vec2(0.5, 1.0),
-        },
-        vert_c: Vertx {
-            pos: Vec3 {
-                x: 300.0,
-                y: 0.0,
+                x: 400.0,
+                y: 400.0,
                 z: 0.0,
             },
             color: Vec3 {
@@ -111,6 +98,19 @@ fn main() {
                 z: 0.0,
             },
             uv: glam::vec2(1.0, 1.0),
+        },
+        vert_c: Vertx {
+            pos: Vec3 {
+                x: 400.0,
+                y: 100.0,
+                z: 0.0,
+            },
+            color: Vec3 {
+                x: 0.0,
+                y: 1.0,
+                z: 0.0,
+            },
+            uv: glam::vec2(1.0, 0.0),
         },
     };
 

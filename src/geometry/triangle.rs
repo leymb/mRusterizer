@@ -3,7 +3,10 @@ pub mod vertex;
 use glam::Vec3Swizzles;
 use vertex::Vertx;
 
-use crate::{helper::{barycentric_coords, edge_function, index_to_coords, to_argb8}, texture::Texture};
+use crate::{
+    helper::{barycentric_coords, edge_function, index_to_coords, to_argb8},
+    texture::Texture,
+};
 
 pub struct Tri {
     pub vert_a: Vertx,
@@ -15,7 +18,7 @@ impl Tri {
     pub fn raster(&self, buffer: &mut Vec<u32>, z_buffer: &mut Vec<f32>, height: usize) {
         for (i, pixel) in buffer.iter_mut().enumerate() {
             let coords = index_to_coords(i, height);
-            let coords = glam::vec2(coords.0 as f32, coords.1 as f32);
+            let coords = glam::vec2(coords.0 as f32, coords.1 as f32) + 0.5;
 
             let tri_area = edge_function(
                 self.vert_a.pos.xy(),
@@ -53,10 +56,16 @@ impl Tri {
         }
     }
 
-    pub fn raster_textured(&self, buffer: &mut Vec<u32>, z_buffer: &mut Vec<f32>, texture: &Texture, height: usize) {
+    pub fn raster_textured(
+        &self,
+        buffer: &mut Vec<u32>,
+        z_buffer: &mut Vec<f32>,
+        texture: &Texture,
+        height: usize,
+    ) {
         for (i, pixel) in buffer.iter_mut().enumerate() {
             let coords = index_to_coords(i, height);
-            let coords = glam::vec2(coords.0 as f32, coords.1 as f32);
+            let coords = glam::vec2(coords.0 as f32, coords.1 as f32) + 0.5;
 
             let tri_area = edge_function(
                 self.vert_a.pos.xy(),
@@ -79,7 +88,9 @@ impl Tri {
                 if depth < z_buffer[i] {
                     z_buffer[i] = depth;
 
-                    let tex_coords = bar_coords.x * self.vert_a.uv + bar_coords.y * self.vert_b.uv + bar_coords.z * self.vert_c.uv;
+                    let tex_coords = bar_coords.x * self.vert_a.uv
+                        + bar_coords.y * self.vert_b.uv
+                        + bar_coords.z * self.vert_c.uv;
                     let color = texture.sample_texture(tex_coords);
 
                     *pixel = color;

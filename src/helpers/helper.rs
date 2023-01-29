@@ -38,3 +38,13 @@ pub fn barycentric_coords(point: Vec2, v0: Vec2, v1: Vec2, v2: Vec2, area: f32) 
         None
     }
 }
+
+pub fn lerp<T>(start: T, end: T, alpha: f32) -> T
+where
+    T: std::ops::Sub<Output = T>
+        + std::ops::Mul<f32, Output = T>
+        + std::ops::Add<Output = T>
+        + Copy,
+{
+    start + (end - start) * alpha
+}

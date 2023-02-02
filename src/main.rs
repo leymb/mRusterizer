@@ -76,7 +76,7 @@ fn main() {
             0.0,
         ));
 
-        let mvp = camera.get_proj_mat() * camera.get_view_mat() * mesh_transform.get_trs_mat();
+        // let mvp = camera.get_proj_mat() * camera.get_view_mat() * mesh_transform.get_trs_mat();
 
         // test_quad.raster(
         //     Some(&test_tex),

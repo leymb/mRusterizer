@@ -1,5 +1,5 @@
 use glam::{Vec2, Vec3};
-use std::ops::{Add, Mul, Sub};
+use std::ops::{Add, Mul, Sub, MulAssign};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Vertx {
@@ -11,6 +11,14 @@ pub struct Vertx {
 impl Vertx {
     pub fn new(pos: Vec3, color: Vec3, uv: Vec2) -> Self {
         Self { pos, color, uv }
+    }
+}
+
+impl MulAssign<f32> for Vertx {
+    fn mul_assign(&mut self, rhs: f32) {
+        self.pos *= rhs;
+        self.color *= rhs;
+        self.uv *= rhs;
     }
 }
 

@@ -1,7 +1,7 @@
 use glam::{Mat4, Vec2, Vec3};
 
 use crate::{
-    camera::transform::{self, Transform},
+    camera::transform::Transform,
     mesh::Mesh,
     texture::Texture,
     triangle::{vertex::Vertx, Tri},

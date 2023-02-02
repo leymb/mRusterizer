@@ -1,3 +1,5 @@
+use std::ops::{Add, AddAssign};
+
 use glam::{Mat4, Vec2};
 
 use crate::{
@@ -20,7 +22,7 @@ impl Mesh {
         &self.triangles
     }
 
-    pub fn add_section(&mut self, triangles: &mut [Tri]) {
+    pub fn add_section(&mut self, triangles: &[Tri]) {
         self.triangles.extend_from_slice(triangles);
     }
 
@@ -54,5 +56,25 @@ impl Mesh {
 impl Default for Mesh {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl Add for Mesh
+{
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut res = Mesh::default();
+        res.add_section(self.triangles.as_slice());
+        res.add_section(rhs.triangles.as_slice());
+
+        res
+    }
+}
+
+impl AddAssign for Mesh
+{
+    fn add_assign(&mut self, rhs: Self) {
+        self.add_section(rhs.triangles.as_slice());
     }
 }

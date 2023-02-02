@@ -3,7 +3,7 @@ use glam::{Mat4, Vec2, Vec3};
 use crate::{
     mesh::Mesh,
     texture::Texture,
-    triangle::{self, vertex::Vertx, Tri},
+    triangle::{vertex::Vertx, Tri},
 };
 
 pub struct Quad {
@@ -24,8 +24,8 @@ impl Quad {
     pub fn raster(
         &self,
         texture: Option<&Texture>,
-        buffer: &mut Vec<u32>,
-        z_buffer: &mut Vec<f32>,
+        buffer: &mut [u32],
+        z_buffer: &mut [f32],
         window_size: Vec2,
         mvp_mat: &Mat4,
     ) {

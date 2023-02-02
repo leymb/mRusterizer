@@ -1,6 +1,6 @@
 #[path = "./vertex.rs"]
 pub mod vertex;
-use glam::{Mat4, Vec2, Vec3, Vec3Swizzles, Vec4};
+use glam::{Mat4, Vec2, Vec4};
 use vertex::Vertx;
 
 use crate::{
@@ -26,8 +26,8 @@ impl Tri {
 
     pub fn raster(
         &self,
-        buffer: &mut Vec<u32>,
-        z_buffer: &mut Vec<f32>,
+        buffer: &mut [u32],
+        z_buffer: &mut [f32],
         texture: Option<&Texture>,
         viewport_size: Vec2,
         mvp_mat: &Mat4,

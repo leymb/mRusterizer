@@ -21,16 +21,13 @@ pub mod texture;
 
 use camera::transform::Transform;
 use camera::Camera;
-use glam::{Vec2, Vec3, Vec4};
-use helper::{clear_buffer, from_argb8, to_argb8};
+use glam::{Vec2, Vec4};
+use helper::clear_buffer;
 use line_drawing::draw_line;
-use mesh::Mesh;
 use minifb::{Key, Window, WindowOptions};
 use quad::Quad;
 use std::path::Path;
 use texture::Texture;
-use triangle::vertex::Vertx;
-use triangle::Tri;
 
 const WIDTH: usize = 640;
 const HEIGHT: usize = 360;
@@ -79,23 +76,14 @@ fn main() {
             0.0,
         ));
 
-        let second_mesh_transform = Transform::from_rotation(glam::Quat::from_euler(
-            glam::EulerRot::XYZ,
-            -mesh_rot,
-            0.0,
-            0.0,
-        ));
-
         let mvp = camera.get_proj_mat() * camera.get_view_mat() * mesh_transform.get_trs_mat();
-        let second_mvp =
-            camera.get_proj_mat() * camera.get_view_mat() * second_mesh_transform.get_trs_mat();
 
         test_quad.raster(
             Some(&test_tex),
             &mut buffer,
             &mut z_buffer,
             Vec2::new(WIDTH as f32, HEIGHT as f32),
-            &second_mvp,
+            &mvp,
         );
 
         draw_line(

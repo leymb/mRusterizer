@@ -2,9 +2,6 @@ use glam::{UVec2, Vec2, Vec4};
 
 use crate::helper::{from_argb8, get_pixel_index, lerp, to_argb8};
 
-#[path = "./helper.rs"]
-mod helper;
-
 fn plot_color(
     pixel: &UVec2,
     brightness: f32,
@@ -13,14 +10,14 @@ fn plot_color(
     window_width: usize,
 ) {
     // apply brightness
-    let t_color = to_argb8(
-        (color.x * brightness) as u8,
-        (color.y * brightness) as u8,
-        (color.z * brightness) as u8,
-        (color.w * brightness) as u8,
-    );
+    // let t_color = to_argb8(
+    //     (color.x * brightness) as u8,
+    //     (color.y * brightness) as u8,
+    //     (color.z * brightness) as u8,
+    //     (color.w * brightness) as u8,
+    // );
 
-    let pixel_center = get_pixel_index(&pixel, window_width);
+    let pixel_center = get_pixel_index(pixel, window_width);
 
     let pixel_up = get_pixel_index(
         &UVec2 {
@@ -125,10 +122,7 @@ pub fn draw_line(
     let steep = (point_b.y - point_a.y).abs() > (point_b.x - point_a.x).abs();
 
     if steep {
-        let t_temp_a = point_a.y;
-        point_a.y = point_a.x;
-        point_a.x = t_temp_a;
-
+        std::mem::swap(&mut point_a.y, &mut point_a.x);
         std::mem::swap(&mut point_b.y, &mut point_b.x);
     }
 
@@ -139,13 +133,8 @@ pub fn draw_line(
 
     let dx = point_b.x - point_a.x;
     let dy = point_b.y - point_a.y;
-    let gradient: f32;
 
-    if dx == 0.0 {
-        gradient = 1.0;
-    } else {
-        gradient = dy / dx
-    };
+    let gradient: f32 = if dx == 0.0 { 1.0 } else { dy / dx };
 
     let mut xend = round(point_a.x);
     let mut yend = point_a.y + gradient * (xend - point_a.x);
@@ -256,7 +245,7 @@ pub fn draw_line(
         for x in (xpxl1 + 1.0f32) as u32..(xpxl2 - 1.0f32) as u32 {
             plot_color(
                 &UVec2 {
-                    x: x,
+                    x,
                     y: intery.floor() as u32,
                 },
                 rfpart(intery),
@@ -266,7 +255,7 @@ pub fn draw_line(
             );
             plot_color(
                 &UVec2 {
-                    x: x,
+                    x,
                     y: (intery.floor() + 1.0f32) as u32,
                 },
                 fpart(intery),

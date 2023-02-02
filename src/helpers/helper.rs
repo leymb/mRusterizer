@@ -69,7 +69,7 @@ where
     b1 + (v - a1) * (b2 - b1) / (a2 - a1)
 }
 
-pub fn clear_buffer<T>(buffer: &mut Vec<T>, clear_value: T)
+pub fn clear_buffer<T>(buffer: &mut [T], clear_value: T)
 where
     T: Copy,
 {

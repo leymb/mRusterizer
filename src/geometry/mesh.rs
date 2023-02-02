@@ -1,5 +1,4 @@
-use glam::{Mat4, UVec3, Vec2, Vec3};
-use std::ops::{Add, Mul, Sub};
+use glam::{Mat4, Vec2};
 
 use crate::{
     texture::Texture,
@@ -27,18 +26,12 @@ impl Mesh {
 
     pub fn from_vertices(vertices: &[Vertx]) -> Self {
         let mut tris: Vec<Tri> = Vec::new();
-        for mut i in 0..vertices.len() {
+        for i in (0..vertices.len()).step_by(3) {
             tris.push(Tri {
                 vert_a: vertices[i],
                 vert_b: vertices[i + 1],
                 vert_c: vertices[i + 2],
             });
-
-            if i + 3 < vertices.len() {
-                i += 3;
-            } else {
-                break;
-            }
         }
 
         Self { triangles: tris }
@@ -47,8 +40,8 @@ impl Mesh {
     pub fn raster(
         &self,
         texture: Option<&Texture>,
-        buffer: &mut Vec<u32>,
-        z_buffer: &mut Vec<f32>,
+        buffer: &mut [u32],
+        z_buffer: &mut [f32],
         window_size: Vec2,
         mvp_mat: &Mat4,
     ) {

@@ -9,6 +9,15 @@ pub fn to_argb8(a: u8, r: u8, g: u8, b: u8) -> u32 {
     argb
 }
 
+pub fn from_argb8(color: u32) -> (u8, u8, u8, u8) {
+    let a = (color >> 24) as u8;
+    let r = (color >> 16) as u8;
+    let g = (color >> 8) as u8;
+    let b = color as u8;
+
+    (a, r, g, b)
+}
+
 // color as argb
 pub fn get_pixel_index(pixel_pos: &UVec2, width: usize) -> usize {
     width * pixel_pos.y as usize + pixel_pos.x as usize
@@ -47,4 +56,22 @@ where
         + Copy,
 {
     start + (end - start) * alpha
+}
+
+pub fn map_to_range<T>(v: T, a1: T, a2: T, b1: T, b2: T) -> T
+where
+    T: std::ops::Div<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + Copy,
+{
+    b1 + (v - a1) * (b2 - b1) / (a2 - a1)
+}
+
+pub fn clear_buffer<T>(buffer: &mut Vec<T>, clear_value: T)
+where
+    T: Copy,
+{
+    buffer.iter_mut().map(|x| *x = clear_value).count();
 }

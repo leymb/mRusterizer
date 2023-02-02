@@ -1,6 +1,6 @@
 use glam::{UVec2, Vec2, Vec4};
 
-use crate::helper::{get_pixel_index, to_argb8};
+use crate::helper::{from_argb8, get_pixel_index, lerp, to_argb8};
 
 #[path = "./helper.rs"]
 mod helper;
@@ -17,11 +17,89 @@ fn plot_color(
         (color.x * brightness) as u8,
         (color.y * brightness) as u8,
         (color.z * brightness) as u8,
-        color.w as u8,
+        (color.w * brightness) as u8,
     );
 
-    let t_index = get_pixel_index(&pixel, window_width);
-    buffer[t_index] = t_color;
+    let pixel_center = get_pixel_index(&pixel, window_width);
+
+    let pixel_up = get_pixel_index(
+        &UVec2 {
+            x: pixel.x,
+            y: pixel.y - 1,
+        },
+        window_width,
+    );
+    let pixel_down = get_pixel_index(
+        &UVec2 {
+            x: pixel.x,
+            y: pixel.y + 1,
+        },
+        window_width,
+    );
+    let pixel_left = get_pixel_index(
+        &UVec2 {
+            x: pixel.x - 1,
+            y: pixel.y,
+        },
+        window_width,
+    );
+    let pixel_right = get_pixel_index(
+        &UVec2 {
+            x: pixel.x + 1,
+            y: pixel.y,
+        },
+        window_width,
+    );
+
+    if pixel_center < buffer.len()
+        && pixel_down < buffer.len()
+        && pixel_up < buffer.len()
+        && pixel_left < buffer.len()
+        && pixel_right < buffer.len()
+    {
+        let pixel_up_color = from_argb8(buffer[pixel_up]);
+        let pixel_down_color = from_argb8(buffer[pixel_down]);
+        let pixel_left_color = from_argb8(buffer[pixel_left]);
+        let pixel_right_color = from_argb8(buffer[pixel_right]);
+
+        let inverse = 1.0 / 4.0;
+
+        let a_average = ((pixel_up_color.0 as f32
+            + pixel_down_color.0 as f32
+            + pixel_left_color.0 as f32
+            + pixel_right_color.0 as f32)
+            * inverse)
+            * brightness;
+
+        let r_average = ((pixel_up_color.1 as f32
+            + pixel_down_color.1 as f32
+            + pixel_left_color.1 as f32
+            + pixel_right_color.1 as f32)
+            * inverse)
+            * brightness;
+
+        let g_average = ((pixel_up_color.2 as f32
+            + pixel_down_color.2 as f32
+            + pixel_left_color.2 as f32
+            + pixel_right_color.2 as f32)
+            * inverse)
+            * brightness;
+
+        let b_average = ((pixel_up_color.3 as f32
+            + pixel_down_color.3 as f32
+            + pixel_left_color.3 as f32
+            + pixel_right_color.3 as f32)
+            * inverse)
+            * brightness;
+
+        buffer[pixel_center] = to_argb8(
+            lerp(color.x, a_average, 1.0 - brightness) as u8,
+            lerp(color.y, r_average, 1.0 - brightness) as u8,
+            lerp(color.z, g_average, 1.0 - brightness) as u8,
+            lerp(color.w, b_average, 1.0 - brightness) as u8,
+        );
+    }
+    //buffer[pixel_center] = t_color;
 }
 
 fn round(x: f32) -> f32 {

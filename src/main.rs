@@ -78,12 +78,22 @@ fn main() {
 
         let mvp = camera.get_proj_mat() * camera.get_view_mat() * mesh_transform.get_trs_mat();
 
-        test_quad.raster(
+        // test_quad.raster(
+        //     Some(&test_tex),
+        //     &mut buffer,
+        //     &mut z_buffer,
+        //     Vec2::new(WIDTH as f32, HEIGHT as f32),
+        //     &mvp,
+        // );
+
+        test_quad.raster_as_cube(
             Some(&test_tex),
             &mut buffer,
             &mut z_buffer,
             Vec2::new(WIDTH as f32, HEIGHT as f32),
-            &mvp,
+            &mesh_transform.get_trs_mat(),
+            &camera.get_view_mat(),
+            &camera.get_proj_mat(),
         );
 
         draw_line(
